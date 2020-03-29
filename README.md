@@ -1,2 +1,2 @@
 # sdp-starter-kit
-A series of POCs to demo how to get started with SDP
+A series of projects to demo how to get started with SDP

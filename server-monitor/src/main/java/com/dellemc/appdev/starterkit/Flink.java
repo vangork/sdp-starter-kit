@@ -19,10 +19,6 @@ import org.apache.flink.api.java.tuple.Tuple2;
 public class Flink {
     public static void main( String[] args )
     {
-        // turn off logger
-        org.apache.log4j.BasicConfigurator.configure();
-        org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
-        
         // Pravega Param
         URI pravegaControllerUri = Parameters.getPravegaUri();
         String pravegaScope = Parameters.getPravegaScope();
@@ -56,7 +52,8 @@ public class Flink {
 
             // initialize the Flink execution environment
             final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-            env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime); 
+            env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
+            env.setParallelism(1);
             
             DataStream<ServerStatus> dataStream = env.addSource(source)
                 .name(pravegaStream)
@@ -71,7 +68,7 @@ public class Flink {
                 //     }
                 // )
                 .keyBy((ServerStatus x) -> x.getKey())
-                .timeWindow(Time.milliseconds(10000)) // 10 seconds
+                .timeWindow(Time.milliseconds(5000)) // 5 seconds
                 .aggregate(new AverageAggregate());
 
             // create an output sink to print to stdout for verification
@@ -92,8 +89,8 @@ public class Flink {
     }
 
     private static class AssignTimestampAndWatermarks implements AssignerWithPeriodicWatermarks<ServerStatus> {
-        static final long serialVersionUID = 0;
-        private final long maxOutOfOrderness = 5000; // 5 seconds
+        static final long serialVersionUID = 1L;
+        private final long maxOutOfOrderness = 2000; // 2 seconds
 
         private long currentMaxTimestamp = 0L;
 
@@ -101,7 +98,7 @@ public class Flink {
         public long extractTimestamp(ServerStatus ele, long previousElementTimestamp) {
             long timestamp = ele.getTimestamp();
             currentMaxTimestamp = Math.max(timestamp, currentMaxTimestamp);
-            //System.out.format("[Info] [flink] %s handled event '%s'\n", new Timestamp(System.currentTimeMillis()), ele);
+            System.out.format("[Info] [flink] %s handled event '%s'\n", new Timestamp(System.currentTimeMillis()), ele);
             return timestamp;
         }
 
@@ -118,7 +115,7 @@ public class Flink {
     // f2.f0 server
     // f2.f1 timestamp
     private static class AverageAggregate implements AggregateFunction<ServerStatus, Tuple3<Double, Long, Tuple2<String, Long>>, ServerStatus> {
-        static final long serialVersionUID = 0;
+        static final long serialVersionUID = 1L;
 
         @Override
         public Tuple3<Double, Long, Tuple2<String, Long>> createAccumulator() {
@@ -132,7 +129,7 @@ public class Flink {
         }
 
         @Override
-        public ServerStatus getResult(Tuple3<Double, Long, Tuple2<String, Long>> acc) { 
+        public ServerStatus getResult(Tuple3<Double, Long, Tuple2<String, Long>> acc) {
             ServerStatus ss = new ServerStatus(acc.f2.f0, acc.f2.f1, acc.f0 / acc.f1);
             System.out.format("[Info] [flink] %s generate event '%s'\n", new Timestamp(System.currentTimeMillis()), ss);
             return ss;

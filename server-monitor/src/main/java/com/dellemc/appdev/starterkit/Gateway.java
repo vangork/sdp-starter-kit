@@ -7,8 +7,8 @@ public class Gateway
     public static void main( String[] args )
     {
 		// turn off logger
-		org.apache.log4j.BasicConfigurator.configure();
-		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
+		// org.apache.log4j.BasicConfigurator.configure();
+		// org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
 		// mqtt params
 		String mqttBrokerUri = Parameters.getMqttBrokerUri();

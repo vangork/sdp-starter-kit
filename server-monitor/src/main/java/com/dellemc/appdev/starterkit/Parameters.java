@@ -15,7 +15,7 @@ public class Parameters {
     }
 
     public static String getMqttBrokerUri() {
-        return getEnvVar("MQTT_BROKER_URI", "mqtt://localhost:1883");
+        return getEnvVar("MQTT_BROKER_URI", "tcp://127.0.0.1:1883");
     }
     public static boolean getMqttCleanSession() {
         return Boolean.parseBoolean(getEnvVar("MQTT_CLEAN_SESSION", "true"));
@@ -30,19 +30,17 @@ public class Parameters {
         return Integer.parseInt(getEnvVar("MQTT_KEEP_ALIVE", "60"));
     }
     public static String getMqttSubTopic() {
-        return getEnvVar("MQTT_SUB_TOPIC", "#");
+        return getEnvVar("MQTT_SUB_TOPIC", "server-monitor");
     }
     public static int getMqttSubQos() {
         return Integer.parseInt(getEnvVar("MQTT_SUB_QOS", "0"));
     }
 
     public static String getMqttSubCliendId() {
-        return getEnvVar("MQTT_SUB_CLIENT_ID", "mqttsub01");
+        return getEnvVar("MQTT_SUB_CLIENT_ID", "server-monitor-gateway");
     }
 
-    public static URI getPravegaUri() {
-        return URI.create(getEnvVar("PRAVEGA_CONTROLLER_URI", "tcp://127.0.0.1:9090"));
-    }
+    public static URI getPravegaUri() { return URI.create(getEnvVar("PRAVEGA_CONTROLLER_URI", "tcp://127.0.0.1:9090")); }
     public static String getPravegaScope() {
         return getEnvVar("PRAVEGA_SCOPE", "server-monitor");
     }
@@ -56,16 +54,14 @@ public class Parameters {
         return getEnvVar("PRAVEGA_READER_GROUP", "server-monitor-reader-01");
     }
 
-    public static String getInfluxDbUri() {
-        return getEnvVar("INFLUXDB_URI", "http://monitoring-influxdb.default.svc.cluster.local:8086");
-    }
+    public static String getInfluxDbUri() { return getEnvVar("INFLUXDB_URI", "http://127.0.0.1:8086"); }
     public static String getInfluxDbUser() {
-        return getEnvVar("INFLUXDB_USER", "root");
+        return getEnvVar("INFLUXDB_USER", "");
     }
     public static String getInfluxDbPassword() {
-        return getEnvVar("INFLUXDB_PASSWORD", "root");
+        return getEnvVar("INFLUXDB_PASSWORD", "");
     }
     public static String getInfluxDbDatabase() {
-        return getEnvVar("INFLUXDB_DATABASE", "server-monitor-db");
+        return getEnvVar("INFLUXDB_DATABASE", "server_monitor");
     }
 }

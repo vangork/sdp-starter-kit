@@ -31,10 +31,10 @@ public class MqttSub
     		// such as cleanSession and LWT
 	    	conOpt = new MqttConnectOptions();
 	    	conOpt.setCleanSession(cleanSession);
-	    	if(password != null ) {
+	    	if(password != null && !password.isEmpty()) {
 	    	  	conOpt.setPassword(password.toCharArray());
 	    	}
-	    	if(user != null) {
+	    	if(user != null && !user.isEmpty()) {
 	    	  	conOpt.setUserName(user);
 			}
 

@@ -24,16 +24,14 @@ public class InfluxdbSink extends RichSinkFunction<ServerStatus> {
         this.password = password;
         this.database = database;
     }
+
     @Override
     public void invoke(ServerStatus value) {
         try {
-            // String dbName = "sharktank";
-            influxDB.query(new Query("CREATE DATABASE " + database));
-            influxDB.setDatabase(database);
             System.out.println("value: " + value);
             influxDB.write(Point.measurement(value.getKey())
                     .time(value.getTimestamp(), TimeUnit.MILLISECONDS)
-                    .addField("VALUE", value.load)
+                    .addField("LOAD", value.load)
                     .build());
 
         } catch(Exception e) {
@@ -44,7 +42,16 @@ public class InfluxdbSink extends RichSinkFunction<ServerStatus> {
     @Override
     public void open(Configuration config) {
         // influxDB = InfluxDBFactory.connect("http://monitoring-influxdb.default.svc.cluster.local:8086", "root", "root");
-        influxDB = InfluxDBFactory.connect(uri, user, password);
+        if (user == null || user.isEmpty()) {
+            influxDB = InfluxDBFactory.connect(uri);
+        }
+        else {
+            influxDB = InfluxDBFactory.connect(uri, user, password);
+        }
+
+        influxDB.query(new Query("CREATE DATABASE " + database));
+        influxDB.setDatabase(database);
+        influxDB.query(new Query("DROP SERIES FROM /.*/"));
     }
 
     @Override
