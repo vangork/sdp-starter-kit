@@ -24,21 +24,21 @@ https://grafana.com/grafana/download
 mvn clean package
 ```
 
-3. start the pravega gateway
+3. Start the pravega gateway
 ```
 java -jar pravega-gateway\target\pravega-gateway-1.0.0.jar
 ```
 
-3. Run calculator
+4. Run calculator
 ```
 java -jar calculator\target\calculator-1.0.0.jar
 ```
 
-4. simulate the mqtt writer by injecting pre-recorded data
+5. Simulate the mqtt writer by injecting pre-recorded data
 ```
 java -jar mqtt-writer\target\mqtt-writer-1.0.0.jar
 ```
 
-5. Open grafana portal, and import dashboard from visualization/dashboard.json
+6. Open grafana portal, and import dashboard from visualization/dashboard.json
 
 There you go!

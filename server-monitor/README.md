@@ -8,6 +8,7 @@ IOT Client -> MQTT Server <- PravegaGateway -> PravegaServer <- Flink -> Influxd
 ## Prerequisites
 * MQTT Brocker 3.2.7
 https://docs.emqx.io/broker/v3/en/install.html#docker
+
 |端口  | 说明 |
 | :--- | :--- |
 |1883  |  MQTT TCP 协议端口 |
@@ -31,26 +32,28 @@ https://grafana.com/grafana/download
 1. Keep EMQX, Pravega, Influxdb, Grafana running
 
 2. Navigate to the distance-calculator path and compile the whole project
+
 ```
 mvn clean package
 ```
 
-3. start the pravega gateway
+3. Start the pravega gateway
+
 ```
 java -cp target\server-monitor-1.0-SNAPSHOT.jar com.dellemc.appdev.starterkit.Gateway
 ```
 
-3. Run flink job
+4. Run flink job
+
 ```
 java -cp target\server-monitor-1.0-SNAPSHOT.jar com.dellemc.appdev.starterkit.Flink
 ```
 
-4. send server loadavg info to mqtt broker, the payload structure shows as following:
-
+5. Send server loadavg info to mqtt broker, the payload is a json snippet:
 {
     "server":"",
     "timestamp": "",
-    "load":,
+    "load":
 }
 
 ```
@@ -62,6 +65,6 @@ do
 done
 ```
 
-5. Open grafana portal, and import dashboard from dashboard.json
+6. Open grafana portal, and import dashboard from dashboard.json
 
 There you go!
