@@ -28,7 +28,7 @@ public class MqttWriter {
             mqtt.setUserName(CommonParams.getUserName());
             mqtt.setPassword(CommonParams.getPassword());
             System.out.println("MQTT_USERNAME: "+ CommonParams.getUserName());
-            System.out.println("MQTT_PASSWORD: "+ CommonParams.getPassword());
+            System.out.println("MQTT_PASSWORD: "+ "********" );
 
         }
         System.out.println("MQTT_ALLOW_INSECURE: "+ CommonParams.getIfInsecure());
