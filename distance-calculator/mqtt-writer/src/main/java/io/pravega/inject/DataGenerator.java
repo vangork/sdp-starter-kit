@@ -1,6 +1,7 @@
 package io.pravega.inject;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
@@ -22,10 +23,11 @@ public class DataGenerator {
     /**
      *  Read CSV file and generate  JSON  String as json array of all rows.
      */
-    public static String convertCsvToJson(String fileName) throws Exception {
-        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        InputStream inputStream = classloader.getResourceAsStream(fileName);
-
+    public static String convertCsvToJson(String filePath) throws Exception {
+//        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+//        InputStream inputStream = classloader.getResourceAsStream(fileName);
+        File dataFile = new File(filePath);
+        InputStream inputStream = new FileInputStream(dataFile);
         CsvSchema csvSchema = CsvSchema.builder().setUseHeader(true).build();
         CsvMapper csvMapper = new CsvMapper();
 
