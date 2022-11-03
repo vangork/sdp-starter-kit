@@ -9,34 +9,60 @@
         <java.version>11</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <flink.version>1.9.0</flink.version>
-        <pravega.version>0.6.1</pravega.version>
+        <flink.version>1.15.2</flink.version>
+        <pravega.version>0.12.0</pravega.version>
+        <flinkconnector.version>0.12.0</flinkconnector.version>
+        <flinkshort.version>1.15</flinkshort.version>
     </properties>
 
     <dependencies>
         <!-- Flink -->
         <dependency>
             <groupId>io.pravega</groupId>
-            <artifactId>pravega-connectors-flink-1.9_2.12</artifactId>
-            <version>${pravega.version}</version>
+            <artifactId>pravega-connectors-flink-${flinkshort.version}_2.12</artifactId>
+            <version>${flinkconnector.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-streaming-java_2.12</artifactId>
+            <artifactId>flink-streaming-java</artifactId>
             <version>${flink.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-streaming-scala_2.12</artifactId>
+            <version>1.15.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-clients</artifactId>
+            <version>1.15.2</version>
         </dependency>
         <dependency>
             <groupId>org.influxdb</groupId>
             <artifactId>influxdb-java</artifactId>
-            <version>2.15</version>
+            <version>2.23</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.9.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+        <dependency>
+            <groupId>io.pravega</groupId>
+            <artifactId>pravega-keycloak-client</artifactId>
+            <version>0.12.0</version>
+        </dependency>
     </dependencies>
-
     <build>
         <resources>
             <resource>

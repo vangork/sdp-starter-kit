@@ -44,8 +44,8 @@ public class Utils {
         Stream stream = pravegaConfig.resolve(streamName);
 
         StreamManager streamManager = StreamManager.create(pravegaConfig.getClientConfig());
-        // create the requested scope (if necessary)
-        streamManager.createScope(stream.getScope());
+        // create the requested scope (if necessary)\
+        //streamManager.createScope(stream.getScope());
         // create the requested stream based on the given stream configuration
         streamManager.createStream(stream.getScope(), stream.getStreamName(), streamConfig);
         System.out.println("DONE: " + stream.getScope() + "/" + stream.getStreamName() + " has been created");

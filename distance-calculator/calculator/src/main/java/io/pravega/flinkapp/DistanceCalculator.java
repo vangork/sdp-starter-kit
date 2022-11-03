@@ -26,18 +26,18 @@ public class DistanceCalculator {
 
     public static void main(String[] args) throws Exception{
 
-        ParameterTool params = ParameterTool.fromArgs(args);
+        //ParameterTool params = ParameterTool.fromArgs(args);
         // initialize the parameter utility tool in order to retrieve input parameters
-        final String scope = params.get("pravega_scope", "distance-calculator");
-        final String streamName = params.get("pravega_stream", "distance-calculator-stream");
-        final URI controllerURI = URI.create(params.get("pravega_controller_uri", "tcp://127.0.0.1:9090"));
-        final String influxdbUrl = String.valueOf(URI.create(params.get("influxdb_url", "http://127.0.0.1:8086")));
-        final String influxdbUsername = params.get("influxdb_username", "");
-        final String influxdbPassword = params.get("influxdb_password", "");
-        final String influxdbDbName = params.get("influxdb_DbName", "distance_calculator");
-        System.out.println("pravega_controller_uri:" + controllerURI );
-        System.out.println("pravega_scope:" + scope );
-        System.out.println("pravega_stream:" + streamName );
+        final String scope = getEnvVar("PRAVEGA_SCOPE", "distance-calculator");
+        final String streamName = getEnvVar("PRAVEGA_STREAM", "distance-calculator-stream");
+        final URI controllerURI = URI.create(getEnvVar("PRAVEGA_CONTROLLER_URI", "tcp://127.0.0.1:9090"));
+        final String influxdbUrl = String.valueOf(URI.create(getEnvVar("influxdb_url", "http://127.0.0.1:8086")));
+        final String influxdbUsername = getEnvVar("influxdb_username", "");
+        final String influxdbPassword = getEnvVar("influxdb_password", "");
+        final String influxdbDbName = getEnvVar("influxdb_DbName", "distance_calculator");
+        System.out.println("PRAVEGA_CONTROLLER_URI:" + controllerURI );
+        System.out.println("PRAVEGA_SCOPE:" + scope );
+        System.out.println("PRAVEGA_STREAM:" + streamName );
         System.out.println("influxdb_url:" + influxdbUrl );
         System.out.println("influxdb_username:" + influxdbUsername );
         System.out.println("influxdb_password:" + influxdbPassword );
@@ -57,10 +57,10 @@ public class DistanceCalculator {
 
 
         // initialize the Flink execution environment
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         // Using EventTime in Flink runtime
-        env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
+        //env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
         // Using ProcessingTime in Flink runtime
         //env.setStreamTimeCharacteristic(TimeCharacteristic.ProcessingTime);
@@ -191,6 +191,12 @@ public class DistanceCalculator {
             return acc.sum / (double) acc.count;
         }
     }
-
+    private static String getEnvVar(String name, String defaultValue) {
+        String value = System.getenv(name);
+        if (value == null || value.isEmpty()) {
+            return defaultValue;
+        }
+        return value;
+    }
 }
 
