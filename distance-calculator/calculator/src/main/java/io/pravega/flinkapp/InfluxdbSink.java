@@ -45,7 +45,7 @@ public class InfluxdbSink extends RichSinkFunction<OutSenorData> {
 
     @Override
     public void open(Configuration config) throws IOException {
-        String flinkfilepath = getEnvVar("FLINK_CONF_DIR", "");
+        String flinkfilepath = getEnvVar("FLINK_CONF_DIR", "/etc/flink");
         flinkfilepath = flinkfilepath+"/"+"flink-conf.yaml";
         System.out.println("flink conf dir " + flinkfilepath);
             ParameterTool params = ParameterTool.fromPropertiesFile(flinkfilepath);
