@@ -4,8 +4,14 @@ package io.pravega.flinkapp;
 import io.pravega.client.stream.Stream;
 import io.pravega.connectors.flink.FlinkPravegaReader;
 import io.pravega.connectors.flink.PravegaConfig;
+import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.functions.AggregateFunction;
+import org.apache.flink.api.common.functions.RuntimeContext;
 import org.apache.flink.api.java.functions.KeySelector;
+import org.apache.flink.configuration.ConfigOption;
+import org.apache.flink.configuration.Configuration;
+import org.apache.flink.configuration.ReadableConfig;
+import org.apache.flink.runtime.util.bash.FlinkConfigLoader;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -19,29 +25,24 @@ import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 
 import org.apache.flink.util.Collector;
 import org.apache.flink.api.java.utils.ParameterTool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 
 public class DistanceCalculator {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DistanceCalculator.class);
     public static void main(String[] args) throws Exception{
 
         //ParameterTool params = ParameterTool.fromArgs(args);
         // initialize the parameter utility tool in order to retrieve input parameters
-        final String scope = getEnvVar("PRAVEGA_SCOPE", "distance-calculator");
-        final String streamName = getEnvVar("PRAVEGA_STREAM", "distance-calculator-stream");
+        final String scope = getEnvVar("PRAVEGA_SCOPE", "distancecalc");
+        final String streamName = getEnvVar("PRAVEGA_STREAM", "distance-calculator");
         final URI controllerURI = URI.create(getEnvVar("PRAVEGA_CONTROLLER_URI", "tcp://127.0.0.1:9090"));
-        final String influxdbUrl = String.valueOf(URI.create(getEnvVar("influxdb_url", "http://127.0.0.1:8086")));
-        final String influxdbUsername = getEnvVar("influxdb_username", "");
-        final String influxdbPassword = getEnvVar("influxdb_password", "");
-        final String influxdbDbName = getEnvVar("influxdb_DbName", "distance_calculator");
-        System.out.println("PRAVEGA_CONTROLLER_URI:" + controllerURI );
-        System.out.println("PRAVEGA_SCOPE:" + scope );
-        System.out.println("PRAVEGA_STREAM:" + streamName );
-        System.out.println("influxdb_url:" + influxdbUrl );
-        System.out.println("influxdb_username:" + influxdbUsername );
-        System.out.println("influxdb_password:" + influxdbPassword );
-        System.out.println("influxdb_DbName:" + influxdbDbName );
+        LOG.info("PRAVEGA_CONTROLLER_URI:" + controllerURI );
+        LOG.info("PRAVEGA_SCOPE:" + scope );
+        LOG.info("PRAVEGA_STREAM:" + streamName );
 
         PravegaConfig pravegaConfig = PravegaConfig.fromDefaults()
                 .withControllerURI(controllerURI)
@@ -57,13 +58,8 @@ public class DistanceCalculator {
 
 
         // initialize the Flink execution environment
+
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-
-        // Using EventTime in Flink runtime
-        //env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
-
-        // Using ProcessingTime in Flink runtime
-        //env.setStreamTimeCharacteristic(TimeCharacteristic.ProcessingTime);
 
         // create the Pravega source to read a stream of text
         FlinkPravegaReader<RawSenorData> source = FlinkPravegaReader.<RawSenorData>builder()
@@ -100,7 +96,7 @@ public class DistanceCalculator {
         // create an output sink to print to stdout for verification
         dataStream.print();
         // create an sink to InfluxDB
-        dataStream.addSink(new InfluxdbSink(influxdbUrl, influxdbUsername, influxdbPassword, influxdbDbName));
+        dataStream.addSink(new InfluxdbSink());
         // execute within the Flink environment
         env.execute("DistanceCalculator");
     }
