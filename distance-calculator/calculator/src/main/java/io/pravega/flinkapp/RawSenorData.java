@@ -37,7 +37,7 @@ public class RawSenorData implements Serializable {
 
     public static Long timeTomMllisecond(String time){
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-        sdf.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         long aftertime = 0;
         try {
             Object d1 = sdf.parse(time).getTime();
