@@ -4,35 +4,19 @@ This project includes the data injection/analytics/visualization, all components
 Basically, the project uses the pre-recorded distance data from a sensor and simulates to write into a Pravega stream and then be processed by a simple logic implemented in Flink job, the computing result are continuously sink to a influxdb which is presented on Grafana dashboard later.
 
 ## Prerequisites
-EMQX 3.2.7
-https://www.emqx.io/downloads
-
-Pravega 0.6.1
-http://pravega.io/docs/latest/getting-started/
-
-InfluxDB 1.7
-https://docs.influxdata.com/influxdb/v1.7/introduction/installation/
-
-Grafana 6.7.1
-https://grafana.com/grafana/download
+Kubernetes Cluster running with SDP instance
 
 ## Running Instruction
-1. Keep EMQX, Pravega, Influxdb, Grafana running.
+1. Refer to `Distance Calculator Demo` inside https://streamingdataplatform.github.io/code-hub/demos/ for detailed instructions on setup and configuration
 
 2. Navigate to the distance-calculator path and compile the whole project
 ```
 mvn clean package
 ```
 
-3. Start the pravega gateway
-```
-java -jar pravega-gateway\target\pravega-gateway-1.0.0.jar
-```
+3. Setup a flink cluster and run the `calculator\target\calculator-1.0.0.jar` as a flink application .
 
-4. Run calculator
-```
-java -jar calculator\target\calculator-1.0.0.jar
-```
+4. Open grafana portal, and import dashboard from `visualization/dashboard.json` by specifying appropriate datasource.
 
 5. Simulate the mqtt writer by injecting pre-recorded data
 
@@ -50,6 +34,5 @@ java -jar calculator\target\calculator-1.0.0.jar
 java -jar mqtt-writer\target\mqtt-writer-1.0.0.jar
 ```
 
-6. Open grafana portal, and import dashboard from visualization/dashboard.json
 
 There you go!
