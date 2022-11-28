@@ -21,6 +21,7 @@ public class InfluxdbSink extends RichSinkFunction<OutSenorData> {
 
 
     public InfluxdbSink() {
+        // Default values with dummy credentials
         this.influxdbUrl = "http://project-metrics:8086";
         this.influxdbUsername = "default";
         this.influxdbPassword = "default";
@@ -48,18 +49,18 @@ public class InfluxdbSink extends RichSinkFunction<OutSenorData> {
         String flinkfilepath = getEnvVar("FLINK_CONF_DIR", "/etc/flink");
         flinkfilepath = flinkfilepath+"/"+"flink-conf.yaml";
         System.out.println("flink conf dir " + flinkfilepath);
-            ParameterTool params = ParameterTool.fromPropertiesFile(flinkfilepath);
-            influxdbDbName = params.get("metrics.reporter.influxdb.db","test_flnk");
-            influxdbUsername = params.get("metrics.reporter.influxdb.username","default");
-            influxdbPassword = params.get("metrics.reporter.influxdb.password","default");
-            String influxdbdest = params.get("metrics.reporter.influxdb.host","project-metrics");
-            String influxdbport = params.get("metrics.reporter.influxdb.port","8086");
-            influxdbUrl = "http://"+influxdbdest+":"+influxdbport;
+        ParameterTool params = ParameterTool.fromPropertiesFile(flinkfilepath);
+        String influxdbdest = params.get("metrics.reporter.influxdb.host","project-metrics");
+        String influxdbport = params.get("metrics.reporter.influxdb.port","8086");
+        influxdbUrl = "http://"+influxdbdest+":"+influxdbport;
+        influxdbDbName = params.get("metrics.reporter.influxdb.db","test_flnk");
+        influxdbUsername = params.get("metrics.reporter.influxdb.username","default");
+        influxdbPassword = params.get("metrics.reporter.influxdb.password","default");
 
-            System.out.println("influxdbDbName:" + influxdbDbName );
-            System.out.println("influxdbUsername:" + influxdbUsername );
-            System.out.println("influxdbPassword:" + influxdbPassword );
-            System.out.println("influxdbUrl:" + influxdbUrl );
+        System.out.println("influxdbDbName:" + influxdbDbName );
+        System.out.println("influxdbUsername:" + influxdbUsername );
+        System.out.println("influxdbPassword:" + influxdbPassword );
+        System.out.println("influxdbUrl:" + influxdbUrl );
 
         if (influxdbUsername == null || influxdbUsername.isEmpty()) {
             influxDB = InfluxDBFactory.connect(influxdbUrl);
@@ -67,11 +68,7 @@ public class InfluxdbSink extends RichSinkFunction<OutSenorData> {
         else {
             influxDB = InfluxDBFactory.connect(influxdbUrl, influxdbUsername, influxdbPassword);
         }
-        //influxDB = InfluxDBFactory.connect("http://
-        //String influxdbDbName = "demo";
-        //influxDB.query(new Query("CREATE DATABASE " + influxdbDbName));
         influxDB.setDatabase(influxdbDbName);
-        //influxDB.query(new Query("DROP SERIES FROM /.*/"));
     }
 
     @Override
