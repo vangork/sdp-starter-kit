@@ -9,7 +9,6 @@
 
     <modules>
         <module>mqtt-writer</module>
-        <module>pravega-gateway</module>
         <module>calculator</module>
     </modules>
 
