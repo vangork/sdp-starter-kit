@@ -1,0 +1,31 @@
+apiVersion: nautilus.dellemc.com/v1alpha1
+kind: Project
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.name }}
+spec:
+  features:
+  - name: artifactrepository
+    values:
+      storageClassName: {{ .Values.storageClassName }} 
+      storageSize: 10Gi
+  - name: metrics
+    values:
+      grafanaStorageSize: 10Gi
+      influxdbStorageSize: 10Gi
+  - name: pravegamqttbrokerfordemo
+  - name: zookeeper
+    values:
+      replicas: "3"
+  maven:
+    repositories: []
+  storage:
+    ecsS3: {}
+    persistentVolumeClaim:
+      accessModes:
+      - ReadWriteMany
+      resources:
+        requests:
+          storage: 10Gi
+      storageClassName: {{ .Values.storageClassName }}
+      reclaimPolicy: Delete

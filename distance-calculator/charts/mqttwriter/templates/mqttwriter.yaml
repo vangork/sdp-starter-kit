@@ -1,0 +1,25 @@
+{{- $mqtt := .Values.mqtt -}}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mqtt-writer
+  namespace: {{ .Values.name }}
+spec:
+  containers:
+  - image: {{ $mqtt.image }}
+    imagePullPolicy: Always
+    name: mqtt-writer
+    command: ["bash", "-c", "--", "./entrypoint.sh"]
+    env:
+    - name: MQTT_BROKER_URL
+      value: tls://pravega-mqtt-broker:8883
+    - name: MQTT_ALLOW_INSECURE
+      value: "true"
+    - name: MQTT_DATA_FILE
+      value: /opt/MqttWriter/Distance.csv
+    - name: MQTT_USE_AUTH
+      value: "true"
+    - name: MQTT_USERNAME
+      value: {{ $mqtt.username }}
+    - name: MQTT_PASSWORD
+      value: {{ $mqtt.password }}

@@ -1,0 +1,13 @@
+# Default values for features.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+pravegaMQTTBroker:
+  chartVersion: 1.4-W11-2-424b566
+  useLoadBalancerIP: true
+  mqttUsername: user
+  mqttPassword: password
+
+global:
+  external:
+    flat: true

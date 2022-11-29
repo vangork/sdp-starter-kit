@@ -1,0 +1,10 @@
+# Default values for mqttwriter.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+name: distance-calculator
+
+mqtt:
+  image: devops-repo.isus.emc.com:8116/asia-pacific/sanjay_nathani/mqttwriter:latest
+  username: user
+  password: password
