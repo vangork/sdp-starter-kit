@@ -13,7 +13,18 @@ public class CommonParams {
     public static  String getDataFile() {
         return getEnvVar("MQTT_DATA_FILE", "Distance.csv");
     }
-
+    public static  String getUserName() {
+        return getEnvVar("MQTT_USERNAME", "default");
+    }
+    public static  String getPassword() {
+        return getEnvVar("MQTT_PASSWORD", "default");
+    }
+    public static  String getIfAuth() {
+        return getEnvVar("MQTT_USE_AUTH", "false");
+    }
+    public static  String getIfInsecure() {
+        return getEnvVar("MQTT_ALLOW_INSECURE", "false");
+    }
     private static String getEnvVar(String name, String defaultValue) {
         String value = System.getenv(name);
         if (value == null || value.isEmpty()) {
