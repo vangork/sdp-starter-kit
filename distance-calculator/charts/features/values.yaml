@@ -3,8 +3,10 @@
 # Declare variables to be passed into your templates.
 
 pravegaMQTTBroker:
+  # This has to be determined from sdp cluster(version) that is being used to deploy these charts
   chartVersion: 1.4-W11-2-424b566
   useLoadBalancerIP: true
+  # These credentials has to be same as mqttwriter chart's values file credentials 
   mqttUsername: user
   mqttPassword: password
 
