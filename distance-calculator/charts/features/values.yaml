@@ -4,7 +4,7 @@
 
 pravegaMQTTBroker:
   # This has to be determined from sdp cluster(version) that is being used to deploy these charts
-  chartVersion: 1.4-RC0-2-a29a048
+  chartVersion: 1.5-W5-1-99e45da
   useLoadBalancerIP: true
   # These credentials has to be same as mqttwriter chart's values file credentials 
   mqttUsername: user
