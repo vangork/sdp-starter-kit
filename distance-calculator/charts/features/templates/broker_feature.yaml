@@ -1,0 +1,58 @@
+apiVersion: nautilus.dellemc.com/v1alpha1
+kind: ProjectFeature
+metadata:
+  name: pravegamqttbrokerfordemo
+spec:
+  name: Pravega MQTT Broker
+
+  ready:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: pravega-mqtt-broker
+    jsonPath: .status.readyReplicas
+    value: "1"
+
+  ingress:
+    apiVersion: v1
+    {{- if .Values.pravegaMQTTBroker.useLoadBalancerIP }}
+    jsonPath: .status.loadBalancer.ingress[0].ip
+    {{- else }}
+    jsonPath: .metadata.annotations.external-dns\.alpha\.kubernetes\.io\/hostname
+    {{- end }}
+    kind: Service
+    name: pravega-mqtt-broker
+    externalLink: false
+
+  secrets:
+    - pravega-mqtt-broker
+
+  templates:
+    pravegaMQTTBroker: |-
+      apiVersion: helm.toolkit.fluxcd.io/v2beta1
+      kind: HelmRelease
+      metadata:
+        name: pravega-mqtt-broker
+        namespace: {{`{{ .namespace }}`}}
+      spec:
+        chart:
+          spec:
+            chart: pravega-mqtt-broker
+            sourceRef:
+              kind: HelmRepository
+              name: pravega-mqtt-broker
+              namespace: nautilus-system
+            version: {{ $.Values.pravegaMQTTBroker.chartVersion }}
+        install: {}
+        interval: 1m0s
+        targetNamespace: {{`{{ .namespace }}`}}
+        storageNamespace: {{`{{ .namespace }}`}}
+        releaseName: pravega-mqtt-broker
+        values:
+          image:
+            name: {{`{{ .imageRegistry }}`}}/pravega-mqtt-broker
+            tag: {{ $.Values.pravegaMQTTBroker.chartVersion }}
+          externalHost: {{`{{ .externalHost }}`}}
+          externalTlsProtocols: {{ .Values.global.external.tlsProtocols }}
+          externalFlat: {{ .Values.global.external.flat }}
+          mqttUsername: {{ $.Values.pravegaMQTTBroker.mqttUsername }}
+          mqttPassword: {{ $.Values.pravegaMQTTBroker.mqttPassword }}

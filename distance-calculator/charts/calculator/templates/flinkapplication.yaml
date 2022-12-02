@@ -1,0 +1,20 @@
+{{- $name := .Values.name -}}
+apiVersion: flink.nautilus.dellemc.com/v1beta1
+kind: FlinkApplication
+metadata:
+  name: {{ $name }}
+  namespace: {{ $name }}
+spec:
+  flinkVersion: 1.15.2
+  language: Java
+  mainApplicationFile: http://asdrepo.isus.emc.com:8081/artifactory/nautilus-build/distance-calculator-demo/calculator-1.0.0.jar
+  mainApplicationFileType: url
+  mainClass: io.pravega.flinkapp.DistanceCalculator
+  parallelism: 1
+  parameters: []
+  recoveryStrategy:
+    allowNonRestoredState: false
+    type: latest
+  state: started
+  stateStrategy: savepoint
+  type: streaming

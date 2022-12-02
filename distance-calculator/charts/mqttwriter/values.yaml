@@ -1,0 +1,12 @@
+# Default values for mqttwriter.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+name: distance-calculator
+
+mqtt:
+  # The docker file of this image can be found here https://github.com/vangork/sdp-starter-kit/blob/master/distance-calculator/mqtt-writer/Dockerfile
+  image: devops-repo.isus.emc.com:8116/asia-pacific/sanjay_nathani/mqttwriter:latest
+  # These credentials has to be same as features chart's values file credentials
+  username: user
+  password: password

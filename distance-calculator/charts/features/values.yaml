@@ -1,0 +1,15 @@
+# Default values for features.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+pravegaMQTTBroker:
+  # This has to be determined from sdp cluster(version) that is being used to deploy these charts
+  chartVersion: 1.5-W5-1-99e45da
+  useLoadBalancerIP: true
+  # These credentials has to be same as mqttwriter chart's values file credentials 
+  mqttUsername: user
+  mqttPassword: password
+
+global:
+  external:
+    flat: true

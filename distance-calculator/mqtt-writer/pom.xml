@@ -9,7 +9,7 @@
         <java.version>11</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <flink.version>1.9.0</flink.version>
+        <flink.version>1.15.2</flink.version>
     </properties>
 
     <dependencies>
@@ -30,7 +30,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-streaming-java_2.12</artifactId>
+            <artifactId>flink-streaming-java</artifactId>
             <version>${flink.version}</version>
         </dependency>
     </dependencies>

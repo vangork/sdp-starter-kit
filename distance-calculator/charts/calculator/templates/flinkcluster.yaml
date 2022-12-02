@@ -1,0 +1,53 @@
+{{- $name := .Values.name -}}
+{{- $cluster := .Values.cluster -}}
+apiVersion: flink.nautilus.dellemc.com/v1beta1
+kind: "FlinkCluster"
+metadata:
+  name: "{{ $name }}"
+  namespace: "{{ $name }}"
+spec:
+  imageRef:
+    name: {{ .Values.flinkImage }}
+
+  metrics:
+    name: project-metrics
+
+  localStorage:
+    replicas: 1
+    volumeClaimTemplate:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 3Gi
+
+  zookeeperUrl: zookeeper-client:2181
+
+  # Specify Manager Resources
+  jobManager:
+    replicas: {{ $cluster.jobManager.replicas }}
+    memory: {{ $cluster.jobManager.memory }}
+    cpu: {{ $cluster.jobManager.cpu }}
+    resources:
+      limits:
+        cpu: 250m
+        memory: 1024M
+      requests:
+        cpu: 250m
+        memory: 1024M
+
+  taskManager:
+    gpu: 0
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1536Mi
+        nvidia.com/gpu: "0"
+      requests:
+        cpu: 500m
+        memory: 1536Mi
+        nvidia.com/gpu: "0"
+    replicas: {{ $cluster.taskManager.replicas }}
+    memory: {{ $cluster.taskManager.memory }}
+    cpu: {{ $cluster.taskManager.cpu }}
+    numberOfTaskSlots: {{ $cluster.taskManager.taskSlots }}

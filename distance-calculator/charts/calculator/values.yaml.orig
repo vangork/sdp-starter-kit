@@ -1,0 +1,20 @@
+# Default values for calculator
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+name: $name
+storageClassName: nfs
+replicaCount: 1
+
+cluster:
+  jobManager:
+    replicas: 1
+    memory: 1024M
+    cpu: "\"0.25\""
+  taskManager:
+    cpu: "\"0.5\""
+    taskSlots: 5
+    memory: 1.5Gi
+    replicas: 2
+
+flinkImage: flink-1.15.2
