@@ -17,13 +17,13 @@ sed 's|$data_source|'"$data_source_name"'|' calculator/templates/grafana_dashboa
 helm install features features/
 helm install calculator calculator/
 
-fp_state=$(kubectl -n distance-calculator get flinkapplication distance-calculator --output="jsonpath={.status.state}")
+fp_state=$(kubectl -n $1 get flinkapplication $1 --output="jsonpath={.status.state}")
 
 while [[ "$fp_state" != 'started' ]]
 do
 	echo "Flink application not ready. Sleeping for 5seconds"
 	sleep 5;
-	fp_state=$(kubectl -n distance-calculator get flinkapplication distance-calculator --output="jsonpath={.status.state}")
+	fp_state=$(kubectl -n $1 get flinkapplication $1 --output="jsonpath={.status.state}")
 done
 
 helm install mqttwriter mqttwriter/
